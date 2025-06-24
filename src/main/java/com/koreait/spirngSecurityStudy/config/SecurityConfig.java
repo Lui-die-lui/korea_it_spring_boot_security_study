@@ -1,18 +1,33 @@
 package com.koreait.spirngSecurityStudy.config;
 
+import com.koreait.spirngSecurityStudy.security.filter.JwtAuthenticationFilter;
 import jakarta.websocket.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 public class SecurityConfig {
+
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+
+    // 비밀번호를 안전하게 암호화(해싱) 하고, 검증하는 역할
+    // 단방향 해시, 복호화가 불가능 - 다시 원래대로 바꾸는게 불가능
+    @Bean // ioc 컨테이너에 저장해라
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     // corsConfigurationSource() 설정은 spring security에서
     // CORS(Cross-Origin Resource Sharing)를 처리하기 위한 설정
@@ -55,12 +70,16 @@ public class SecurityConfig {
         http.sessionManagement(Session -> Session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         // 세션 안쓰겠다 설정
 
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        // 뒤 필터에 앞 필터를 적용시킴 but 로그인 안쓰기땜에 지금은 사용 안함
+
 
         // 특정 요청 URL에 대한 권한 설정
         http.authorizeHttpRequests(auth -> {
-//            auth.requestMatchers("/post").permitAll();
+            auth.requestMatchers("/auth/test","/auth/signup").permitAll(); // 이 링크는 전부 허가 해주겠다
             auth.anyRequest().authenticated();
         });
+
         return http.build();
     }
 }
