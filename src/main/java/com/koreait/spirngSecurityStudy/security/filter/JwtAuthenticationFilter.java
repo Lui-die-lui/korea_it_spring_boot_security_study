@@ -18,8 +18,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-@Component // bean등록 해야 autoWird 사용가능
+@Component // bean등록 해야 해당 클래스 Autowird 사용가능
 public class JwtAuthenticationFilter implements Filter {
+    //Java 에서 javax.servlet.Filter는 **원래 서블릿 컨테이너(Tomcat 등)**가 관리하는 것이고,
+    //Spring 에서는 필터를 자동으로 Bean 으로 등록하지 않음.
 
 
     @Autowired
@@ -29,6 +31,7 @@ public class JwtAuthenticationFilter implements Filter {
     private UserRepository userRepository;
 
     @Override // ALT + Ins / ctrl + I - 메서드 구현
+    // Override는 생성자와 구성은 같게, 내용만 바꿔줌(메서드 재정의)
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         //필터 = 전처리 / 후처리 - 응답
 //        System.out.println("전처리");

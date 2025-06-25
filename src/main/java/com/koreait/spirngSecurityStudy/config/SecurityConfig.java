@@ -1,7 +1,6 @@
 package com.koreait.spirngSecurityStudy.config;
 
 import com.koreait.spirngSecurityStudy.security.filter.JwtAuthenticationFilter;
-import jakarta.websocket.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -76,7 +75,7 @@ public class SecurityConfig {
 
         // 특정 요청 URL에 대한 권한 설정
         http.authorizeHttpRequests(auth -> {
-            auth.requestMatchers("/auth/test","/auth/signup").permitAll(); // 이 링크는 전부 허가 해주겠다
+            auth.requestMatchers("/auth/test","/auth/signup","/auth/signin").permitAll(); // 이 링크는 전부 허가 해주겠다(통과시켜주는 용도)
             auth.anyRequest().authenticated();
         });
 

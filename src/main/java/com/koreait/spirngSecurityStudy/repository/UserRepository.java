@@ -16,7 +16,12 @@ public class UserRepository {
     public int addUser(User user) {
         return userMapper.addUser(user);
     }
+
     public Optional<User> getUserByUserId(Integer userId) {
         return userMapper.getUserByUserId(userId);
+    }
+
+    public Optional<User> getUserByUsername(String username) {
+        return userMapper.getUserByUsername(username);
     }
 }

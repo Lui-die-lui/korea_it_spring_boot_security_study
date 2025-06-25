@@ -8,12 +8,20 @@
                 user_tb
             values (0, #{username}, #{password}, #{email})
     </insert>
-    <select id="getUSerByUserId">
+    <select id="getUserByUserId">
         select
             *
         from
             user_tb
         where
             user_id = #{userId}
+    </select>
+    <select id="getUserByUsername">
+        select
+        *
+        from
+        user_tb
+        where
+        username = #{username}
     </select>
 </mapper>
