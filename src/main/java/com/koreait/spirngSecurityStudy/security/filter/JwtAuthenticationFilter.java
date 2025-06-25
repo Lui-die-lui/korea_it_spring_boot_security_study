@@ -69,6 +69,7 @@ public class JwtAuthenticationFilter implements Filter {
                             .username(user.getUsername())
                             .password(user.getPassword())
                             .email(user.getEmail())
+                            .userRoles(user.getUserRoles())
                             .build();
                     // UsernamePasswordAuthenticationToken 직접 생성
                     Authentication authentication = new UsernamePasswordAuthenticationToken(principalUser,"", principalUser.getAuthorities()); // 비번부분은 인증이 완료되어서 비워줌

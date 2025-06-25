@@ -21,5 +21,4 @@ public class UserRole {
     private LocalDateTime updateDt;
 
     private Role role;
-
 }

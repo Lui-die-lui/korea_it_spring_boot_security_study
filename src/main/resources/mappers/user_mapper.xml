@@ -3,7 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.koreait.spirngSecurityStudy.mapper.UserMapper">
-    <insert id="addUser">
+    <insert id="addUser" useGeneratedKeys="true" keyProperty="userId">
+<!--        굳이 조회 안해도 바로 userid-->
             insert into
                 user_tb
             values (0, #{username}, #{password}, #{email})

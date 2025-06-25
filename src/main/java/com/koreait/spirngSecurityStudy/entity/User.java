@@ -3,9 +3,13 @@ package com.koreait.spirngSecurityStudy.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class User {
     private Integer userId;
@@ -13,6 +17,14 @@ public class User {
     private String password;
     private String email;
 
+    // 엔티티의 정의로 따지면 위배되는가?
+    /* JPA 를 사용한다면 위배 될 수 있다. (JPA 는 이미 구현되있는 인터페이스 - 1 : 1 매칭 지켜줘야함)
+    하지만 Mybatis 에서는 엔티티가 DTO 개념을 함께 가지고 있다. */
+
+    // 그럼 어차피 userId로 조인해서 조회하면 되는데 왜 굳이 멤버변수로 추가 하는가?
+    // -> 객체 지향적 설계를 위함 -> 객체를 참조할 수 있는 구조를 선호
+
+    private List<UserRole> userRoles;
 }
 
 // 권한 목록과 유저 권한 목록을 따로 둔 이유

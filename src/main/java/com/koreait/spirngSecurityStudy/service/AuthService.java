@@ -4,7 +4,9 @@ import com.koreait.spirngSecurityStudy.dto.ApiRespDto;
 import com.koreait.spirngSecurityStudy.dto.SignUpReqDto;
 import com.koreait.spirngSecurityStudy.dto.SigninReqDto;
 import com.koreait.spirngSecurityStudy.entity.User;
+import com.koreait.spirngSecurityStudy.entity.UserRole;
 import com.koreait.spirngSecurityStudy.repository.UserRepository;
+import com.koreait.spirngSecurityStudy.repository.UserRoleRepository;
 import com.koreait.spirngSecurityStudy.security.jwt.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,9 +26,17 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private UserRoleRepository userRoleRepository;
+
     public ApiRespDto<?> addUser(SignUpReqDto signUpReqDto) {
-        int result = userRepository.addUser(signUpReqDto.toEntity(bCryptPasswordEncoder));
-        return new ApiRespDto<>("success","회원가입 성공", result);
+        Optional<User> optionalUser = userRepository.addUser(signUpReqDto.toEntity(bCryptPasswordEncoder));
+        UserRole userRole = UserRole.builder()
+                .userId(optionalUser.get().getUserId())
+                .roleId(3) // ?
+                .build();
+        userRoleRepository.addUserRole(userRole);
+        return new ApiRespDto<>("success","회원가입 성공", userRole);
     }
 
     public ApiRespDto<?> signin(SigninReqDto signinReqDto) {
