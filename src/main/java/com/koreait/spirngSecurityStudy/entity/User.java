@@ -1,5 +1,6 @@
 package com.koreait.spirngSecurityStudy.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.util.List;
 public class User {
     private Integer userId;
     private String username;
+    @JsonIgnore
     private String password;
     private String email;
 

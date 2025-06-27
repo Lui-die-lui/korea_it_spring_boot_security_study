@@ -1,13 +1,12 @@
 package com.koreait.spirngSecurityStudy.service;
 
-import com.koreait.spirngSecurityStudy.dto.ApiRespDto;
-import com.koreait.spirngSecurityStudy.dto.SignUpReqDto;
-import com.koreait.spirngSecurityStudy.dto.SigninReqDto;
+import com.koreait.spirngSecurityStudy.dto.*;
 import com.koreait.spirngSecurityStudy.entity.User;
 import com.koreait.spirngSecurityStudy.entity.UserRole;
 import com.koreait.spirngSecurityStudy.repository.UserRepository;
 import com.koreait.spirngSecurityStudy.repository.UserRoleRepository;
 import com.koreait.spirngSecurityStudy.security.jwt.JwtUtil;
+import com.koreait.spirngSecurityStudy.security.model.PrincipalUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,6 +52,21 @@ public class AuthService {
         System.out.println("로그인 성공");
         String token = jwtUtil.generateAccessToken(user.getUserId().toString()); // Integer값을 String으로 반환
         return new ApiRespDto<>("success","로그인 성공",token);
+    }
+
+    public ApiRespDto<?> mdifyEmail(Integer userId, ModifyEmailReqDto modifyEmailReqDto) {
+        User user = modifyEmailReqDto.toEntity(userId);
+        int result = userRepository.updateEmail(user);
+        return new ApiRespDto<>("success", "이메일 수정 성공", result);
+    }
+
+    public ApiRespDto<?> modifyPassword(ModifyPasswordReqDto modifyPasswordReqDto, PrincipalUser principalUser) {
+        if (! bCryptPasswordEncoder.matches(modifyPasswordReqDto.getOldPassword(),principalUser.getPassword())) {
+            return new ApiRespDto<>("failed","사용자 정보를 확인하세요.",null);
+        }
+        String password = bCryptPasswordEncoder.encode(modifyPasswordReqDto.getNewPassword());
+        int result = userRepository.updatePassword(principalUser.getUserId(), password);
+        return new ApiRespDto<>("success","비밀번호 수정 성공",result);
     }
 
 
