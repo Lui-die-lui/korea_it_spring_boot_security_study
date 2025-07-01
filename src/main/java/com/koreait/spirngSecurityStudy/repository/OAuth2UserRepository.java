@@ -12,6 +12,10 @@ public class OAuth2UserRepository {
     private OAuth2UserMapper oAuth2UserMapper;
 
     public OAuth2User getOAth2UserByProviderAndProviderUserId(String provider, String providerUserId) {
-       return oAuth2UserMapper.getOAth2UserByProviderAndProviderUserId(provider,providerUserId);
+       return oAuth2UserMapper.getOAuth2UserByProviderAndProviderUserId(provider,providerUserId);
+    }
+
+    public int insertOAuth2USer(OAuth2User oAuth2User) {
+        return oAuth2UserMapper.insertOAuth2User(oAuth2User);
     }
 }

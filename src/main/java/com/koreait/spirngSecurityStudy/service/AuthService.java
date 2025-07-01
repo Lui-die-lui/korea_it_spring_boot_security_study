@@ -54,7 +54,7 @@ public class AuthService {
         return new ApiRespDto<>("success","로그인 성공",token);
     }
 
-    public ApiRespDto<?> mdifyEmail(Integer userId, ModifyEmailReqDto modifyEmailReqDto) {
+    public ApiRespDto<?> modifyEmail(Integer userId, ModifyEmailReqDto modifyEmailReqDto) {
         User user = modifyEmailReqDto.toEntity(userId);
         int result = userRepository.updateEmail(user);
         return new ApiRespDto<>("success", "이메일 수정 성공", result);

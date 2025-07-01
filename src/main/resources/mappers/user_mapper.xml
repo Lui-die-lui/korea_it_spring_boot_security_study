@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.koreait.spirngSecurityStudy.mapper.UserMapper">
+
     <resultMap id="RoleResultMap" type="com.koreait.spirngSecurityStudy.entity.Role">
         <id property="roleId" column="role_id" />
         <result property="roleName" column="role_name" />
@@ -10,7 +11,7 @@
     </resultMap>
 
     <resultMap id="UserRoleResultMap" type="com.koreait.spirngSecurityStudy.entity.UserRole">
-        <id property="userRoleId" column="user_role_id" />
+        <id property="userRoleId" column="urt_user_role_id" />
         <result property="userId" column="urt_user_id" />
         <result property="roleId" column="urt_role_id" />
         <result property="createDt" column="create_dt" />
@@ -28,54 +29,78 @@
 
     <insert id="addUser" useGeneratedKeys="true" keyProperty="userId">
         insert into
-        user_tb(user_id, username, password, email)
+            user_tb(user_id, username, password, email)
         values (0, #{username}, #{password}, #{email});
     </insert>
     <select id="getUserByUserId" resultMap="UserResultMap">
         select
-        ut.user_id,
-        ut.username,
-        ut.password,
-        ut.email,
+            ut.user_id,
+            ut.username,
+            ut.password,
+            ut.email,
 
-        urt.user_role_id,
-        urt.user_id AS urt_user_id,
-        urt.role_id AS urt_role_id,
-        urt.create_dt,
-        urt.update_dt,
+            urt.user_role_id AS urt_user_role_id,
+            urt.user_id AS urt_user_id,
+            urt.role_id AS urt_role_id,
+            urt.create_dt,
+            urt.update_dt,
 
-        rt.role_id,
-        rt.role_name,
-        rt.role_name_kor
+            rt.role_id,
+            rt.role_name,
+            rt.role_name_kor
         from
-        user_tb ut
-        left join user_role_tb urt on (urt.user_id = ut.user_id)
-        left join role_tb rt on (rt.role_id = urt.role_id)
+            user_tb ut
+            left join user_role_tb urt on (urt.user_id = ut.user_id)
+            left join role_tb rt on (rt.role_id = urt.role_id)
         where
-        ut.user_id = #{userId};
+            ut.user_id = #{userId};
     </select>
     <select id="getUserByUsername" resultMap="UserResultMap">
         select
-        ut.user_id,
-        ut.username,
-        ut.password,
-        ut.email,
+            ut.user_id,
+            ut.username,
+            ut.password,
+            ut.email,
 
-        urt.user_role_id,
-        urt.user_id AS urt_user_id,
-        urt.role_id AS urt_role_id,
-        urt.create_dt,
-        urt.update_dt,
+            urt.user_role_id AS urt_user_role_id,
+            urt.user_id AS urt_user_id,
+            urt.role_id AS urt_role_id,
+            urt.create_dt,
+            urt.update_dt,
 
-        rt.role_id,
-        rt.role_name,
-        rt.role_name_kor
+            rt.role_id,
+            rt.role_name,
+            rt.role_name_kor
         from
-        user_tb ut
-        left join user_role_tb urt on (urt.user_id = ut.user_id)
-        left join role_tb rt on (rt.role_id = urt.role_id)
+            user_tb ut
+            left join user_role_tb urt on (urt.user_id = ut.user_id)
+            left join role_tb rt on (rt.role_id = urt.role_id)
         where
         ut.username = #{username};
+    </select>
+
+    <select id="getUserByEmail" resultMap="UserResultMap">
+        select
+            ut.user_id,
+            ut.username,
+            ut.password,
+            ut.email,
+
+            urt.user_role_id AS urt_user_role_id,
+            urt.user_id AS urt_user_id,
+            urt.role_id AS urt_role_id,
+            urt.create_dt,
+            urt.update_dt,
+
+            rt.role_id,
+            rt.role_name,
+            rt.role_name_kor
+        from
+            user_tb ut
+            left join user_role_tb urt on (urt.user_id = ut.user_id)
+            left join role_tb rt on (rt.role_id = urt.role_id)
+        where
+            ut.email = #{email};
     </select>
 
     <update id="updateEmail">
@@ -88,10 +113,12 @@
     </update>
     <update id="updatePassword">
         update
-        user_tb
+            user_tb
         set
-        password = #{password}
+            password = #{password}
         where
-        user_id = #{userId};
+            user_id = #{userId};
     </update>
+
+
 </mapper>
